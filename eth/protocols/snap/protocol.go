@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/state/snapshot"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 // Constants to match up protocol versions and messages
@@ -104,7 +104,7 @@ func (p *AccountRangePacket) Unpack() ([]common.Hash, [][]byte, error) {
 		accounts = make([][]byte, len(p.Accounts))
 	)
 	for i, acc := range p.Accounts {
-		val, err := snapshot.FullAccountRLP(acc.Body)
+		val, err := types.FullAccountRLP(acc.Body)
 		if err != nil {
 			return nil, nil, fmt.Errorf("invalid account %x: %v", acc.Body, err)
 		}

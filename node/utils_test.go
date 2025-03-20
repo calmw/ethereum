@@ -20,8 +20,8 @@
 package node
 
 import (
-	"github.com/calmw/ethereum/p2p"
-	"github.com/calmw/ethereum/rpc"
+	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // NoopLifecycle is a trivial implementation of the Service interface.

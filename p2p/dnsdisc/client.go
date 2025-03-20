@@ -27,12 +27,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/common/lru"
-	"github.com/calmw/ethereum/common/mclock"
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/p2p/enode"
-	"github.com/calmw/ethereum/p2p/enr"
+	"github.com/ethereum/go-ethereum/common/lru"
+	"github.com/ethereum/go-ethereum/common/mclock"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/p2p/enode"
+	"github.com/ethereum/go-ethereum/p2p/enr"
 	"golang.org/x/sync/singleflight"
 	"golang.org/x/time/rate"
 )
@@ -191,7 +191,7 @@ func (c *Client) resolveEntry(ctx context.Context, domain, hash string) (entry, 
 func (c *Client) doResolveEntry(ctx context.Context, domain, hash string) (entry, error) {
 	wantHash, err := b32format.DecodeString(hash)
 	if err != nil {
-		return nil, fmt.Errorf("invalid base32 hash")
+		return nil, errors.New("invalid base32 hash")
 	}
 	name := hash + "." + domain
 	txts, err := c.cfg.Resolver.LookupTXT(ctx, hash+"."+domain)
@@ -263,7 +263,7 @@ func (it *randomIterator) Next() bool {
 func (it *randomIterator) addTree(url string) error {
 	le, err := parseLink(url)
 	if err != nil {
-		return fmt.Errorf("invalid enrtree URL: %v", err)
+		return fmt.Errorf("invalid DNS discovery URL %q: %v", url, err)
 	}
 	it.lc.addLink("", le.str)
 	return nil

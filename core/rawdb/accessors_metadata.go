@@ -20,11 +20,11 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/ethdb"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/params"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 // ReadDatabaseVersion retrieves the version number of the database.
@@ -111,10 +111,10 @@ const crashesToKeep = 10
 func PushUncleanShutdownMarker(db ethdb.KeyValueStore) ([]uint64, uint64, error) {
 	var uncleanShutdowns crashList
 	// Read old data
-	if data, err := db.Get(uncleanShutdownKey); err != nil {
-		log.Warn("Error reading unclean shutdown markers", "error", err)
-	} else if err := rlp.DecodeBytes(data, &uncleanShutdowns); err != nil {
-		return nil, 0, err
+	if data, err := db.Get(uncleanShutdownKey); err == nil {
+		if err := rlp.DecodeBytes(data, &uncleanShutdowns); err != nil {
+			return nil, 0, err
+		}
 	}
 	var discarded = uncleanShutdowns.Discarded
 	var previous = make([]uint64, len(uncleanShutdowns.Recent))

@@ -28,9 +28,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/calmw/ethereum/internal/testlog"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/rpc"
+	"github.com/ethereum/go-ethereum/internal/testlog"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
@@ -339,8 +339,10 @@ func TestJWT(t *testing.T) {
 		ss, _ := jwt.NewWithClaims(method, testClaim(input)).SignedString(secret)
 		return ss
 	}
-	srv := createAndStartServer(t, &httpConfig{jwtSecret: []byte("secret")},
-		true, &wsConfig{Origins: []string{"*"}, jwtSecret: []byte("secret")}, nil)
+	cfg := rpcEndpointConfig{jwtSecret: []byte("secret")}
+	httpcfg := &httpConfig{rpcEndpointConfig: cfg}
+	wscfg := &wsConfig{Origins: []string{"*"}, rpcEndpointConfig: cfg}
+	srv := createAndStartServer(t, httpcfg, true, wscfg, nil)
 	wsUrl := fmt.Sprintf("ws://%v", srv.listenAddr())
 	htUrl := fmt.Sprintf("http://%v", srv.listenAddr())
 
@@ -381,7 +383,7 @@ func TestJWT(t *testing.T) {
 	expFail := []func() string{
 		// future
 		func() string {
-			return fmt.Sprintf("Bearer %v", issueToken(secret, nil, testClaim{"iat": time.Now().Unix() + int64(jwtExpiryTimeout.Seconds()) + 1}))
+			return fmt.Sprintf("Bearer %v", issueToken(secret, nil, testClaim{"iat": time.Now().Unix() + int64(jwtExpiryTimeout.Seconds()) + 60}))
 		},
 		// stale
 		func() string {
@@ -520,7 +522,6 @@ func TestGzipHandler(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		test := test
 		t.Run(test.name, func(t *testing.T) {
 			srv := httptest.NewServer(newGzipHandler(test.handler))
 			defer srv.Close()

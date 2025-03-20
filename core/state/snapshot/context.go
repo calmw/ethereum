@@ -20,14 +20,14 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"math"
 	"time"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/math"
-	"github.com/calmw/ethereum/core/rawdb"
-	"github.com/calmw/ethereum/ethdb"
-	"github.com/calmw/ethereum/ethdb/memorydb"
-	"github.com/calmw/ethereum/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/rawdb"
+	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/ethdb/memorydb"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 const (
@@ -46,7 +46,7 @@ type generatorStats struct {
 	storage  common.StorageSize // Total account and storage slot size(generation or recovery)
 }
 
-// Log creates an contextual log with the given message and the context pulled
+// Log creates a contextual log with the given message and the context pulled
 // from the internally maintained statistics.
 func (gs *generatorStats) Log(msg string, root common.Hash, marker []byte) {
 	var ctx []interface{}

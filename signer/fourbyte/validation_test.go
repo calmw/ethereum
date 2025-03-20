@@ -20,9 +20,9 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
-	"github.com/calmw/ethereum/signer/core/apitypes"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 )
 
 func mixAddr(a string) (*common.MixedcaseAddress, error) {
@@ -73,6 +73,7 @@ type txtestcase struct {
 }
 
 func TestTransactionValidation(t *testing.T) {
+	t.Parallel()
 	var (
 		// use empty db, there are other tests for the abi-specific stuff
 		db = newEmpty()

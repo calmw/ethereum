@@ -21,15 +21,14 @@ package downloader
 
 import (
 	"errors"
-	"math/big"
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/eth/protocols/eth"
-	"github.com/calmw/ethereum/event"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/p2p/msgrate"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/eth/protocols/eth"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/p2p/msgrate"
 )
 
 const (
@@ -55,37 +54,13 @@ type peerConnection struct {
 	lock    sync.RWMutex
 }
 
-// LightPeer encapsulates the methods required to synchronise with a remote light peer.
-type LightPeer interface {
-	Head() (common.Hash, *big.Int)
-	RequestHeadersByHash(common.Hash, int, int, bool, chan *eth.Response) (*eth.Request, error)
-	RequestHeadersByNumber(uint64, int, int, bool, chan *eth.Response) (*eth.Request, error)
-}
-
 // Peer encapsulates the methods required to synchronise with a remote full peer.
 type Peer interface {
-	LightPeer
+	RequestHeadersByHash(common.Hash, int, int, bool, chan *eth.Response) (*eth.Request, error)
+	RequestHeadersByNumber(uint64, int, int, bool, chan *eth.Response) (*eth.Request, error)
+
 	RequestBodies([]common.Hash, chan *eth.Response) (*eth.Request, error)
 	RequestReceipts([]common.Hash, chan *eth.Response) (*eth.Request, error)
-}
-
-// lightPeerWrapper wraps a LightPeer struct, stubbing out the Peer-only methods.
-type lightPeerWrapper struct {
-	peer LightPeer
-}
-
-func (w *lightPeerWrapper) Head() (common.Hash, *big.Int) { return w.peer.Head() }
-func (w *lightPeerWrapper) RequestHeadersByHash(h common.Hash, amount int, skip int, reverse bool, sink chan *eth.Response) (*eth.Request, error) {
-	return w.peer.RequestHeadersByHash(h, amount, skip, reverse, sink)
-}
-func (w *lightPeerWrapper) RequestHeadersByNumber(i uint64, amount int, skip int, reverse bool, sink chan *eth.Response) (*eth.Request, error) {
-	return w.peer.RequestHeadersByNumber(i, amount, skip, reverse, sink)
-}
-func (w *lightPeerWrapper) RequestBodies([]common.Hash, chan *eth.Response) (*eth.Request, error) {
-	panic("RequestBodies not supported in light client mode sync")
-}
-func (w *lightPeerWrapper) RequestReceipts([]common.Hash, chan *eth.Response) (*eth.Request, error) {
-	panic("RequestReceipts not supported in light client mode sync")
 }
 
 // newPeerConnection creates a new downloader peer.

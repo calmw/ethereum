@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/calmw/ethereum/p2p"
-	"github.com/calmw/ethereum/p2p/nat"
-	"github.com/calmw/ethereum/rpc"
+	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/ethereum/go-ethereum/p2p/nat"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 const (
@@ -34,6 +34,14 @@ const (
 	DefaultWSPort   = 8546        // Default TCP port for the websocket RPC server
 	DefaultAuthHost = "localhost" // Default host interface for the authenticated apis
 	DefaultAuthPort = 8551        // Default port for the authenticated apis
+)
+
+const (
+	// Engine API batch limits: these are not configurable by users, and should cover the
+	// needs of all CLs.
+	engineAPIBatchItemLimit         = 2000
+	engineAPIBatchResponseSizeLimit = 250 * 1000 * 1000
+	engineAPIBodyLimit              = 128 * 1024 * 1024
 )
 
 var (
@@ -46,17 +54,19 @@ var (
 
 // DefaultConfig contains reasonable default settings.
 var DefaultConfig = Config{
-	DataDir:             DefaultDataDir(),
-	HTTPPort:            DefaultHTTPPort,
-	AuthAddr:            DefaultAuthHost,
-	AuthPort:            DefaultAuthPort,
-	AuthVirtualHosts:    DefaultAuthVhosts,
-	HTTPModules:         []string{"net", "web3"},
-	HTTPVirtualHosts:    []string{"localhost"},
-	HTTPTimeouts:        rpc.DefaultHTTPTimeouts,
-	WSPort:              DefaultWSPort,
-	WSModules:           []string{"net", "web3"},
-	GraphQLVirtualHosts: []string{"localhost"},
+	DataDir:              DefaultDataDir(),
+	HTTPPort:             DefaultHTTPPort,
+	AuthAddr:             DefaultAuthHost,
+	AuthPort:             DefaultAuthPort,
+	AuthVirtualHosts:     DefaultAuthVhosts,
+	HTTPModules:          []string{"net", "web3"},
+	HTTPVirtualHosts:     []string{"localhost"},
+	HTTPTimeouts:         rpc.DefaultHTTPTimeouts,
+	WSPort:               DefaultWSPort,
+	WSModules:            []string{"net", "web3"},
+	BatchRequestLimit:    1000,
+	BatchResponseMaxSize: 25 * 1000 * 1000,
+	GraphQLVirtualHosts:  []string{"localhost"},
 	P2P: p2p.Config{
 		ListenAddr: ":30303",
 		MaxPeers:   50,

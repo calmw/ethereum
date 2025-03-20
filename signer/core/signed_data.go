@@ -23,14 +23,14 @@ import (
 	"fmt"
 	"mime"
 
-	"github.com/calmw/ethereum/accounts"
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
-	"github.com/calmw/ethereum/consensus/clique"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/rlp"
-	"github.com/calmw/ethereum/signer/core/apitypes"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/consensus/clique"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 )
 
 // sign receives a request and produces a signature
@@ -260,7 +260,7 @@ func fromHex(data any) ([]byte, error) {
 	return nil, fmt.Errorf("wrong type %T", data)
 }
 
-// typeDataRequest tries to convert the data into a SignDataRequest.
+// typedDataRequest tries to convert the data into a SignDataRequest.
 func typedDataRequest(data any) (*SignDataRequest, error) {
 	var typedData apitypes.TypedData
 	if td, ok := data.(apitypes.TypedData); ok {
@@ -294,7 +294,7 @@ func typedDataRequest(data any) (*SignDataRequest, error) {
 func (api *SignerAPI) EcRecover(ctx context.Context, data hexutil.Bytes, sig hexutil.Bytes) (common.Address, error) {
 	// Returns the address for the Account that was used to create the signature.
 	//
-	// Note, this function is compatible with eth_sign and personal_sign. As such it recovers
+	// Note, this function is compatible with eth_sign. As such it recovers
 	// the address of:
 	// hash = keccak256("\x19Ethereum Signed Message:\n${message length}${message}")
 	// addr = ecrecover(hash, signature)
@@ -302,12 +302,12 @@ func (api *SignerAPI) EcRecover(ctx context.Context, data hexutil.Bytes, sig hex
 	// Note, the signature must conform to the secp256k1 curve R, S and V values, where
 	// the V value must be 27 or 28 for legacy reasons.
 	//
-	// https://github.com/ethereum/go-ethereum/wiki/Management-APIs#personal_ecRecover
+	// https://geth.ethereum.org/docs/tools/clef/apis#account-ecrecover
 	if len(sig) != 65 {
-		return common.Address{}, fmt.Errorf("signature must be 65 bytes long")
+		return common.Address{}, errors.New("signature must be 65 bytes long")
 	}
 	if sig[64] != 27 && sig[64] != 28 {
-		return common.Address{}, fmt.Errorf("invalid Ethereum signature (V is not 27 or 28)")
+		return common.Address{}, errors.New("invalid Ethereum signature (V is not 27 or 28)")
 	}
 	sig[64] -= 27 // Transform yellow paper V from 27/28 to 0/1
 	hash := accounts.TextHash(data)

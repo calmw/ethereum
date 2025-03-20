@@ -19,13 +19,14 @@ package v5test
 import (
 	"bytes"
 	"net"
+	"slices"
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/internal/utesting"
-	"github.com/calmw/ethereum/p2p/discover/v5wire"
-	"github.com/calmw/ethereum/p2p/enode"
-	"github.com/calmw/ethereum/p2p/netutil"
+	"github.com/ethereum/go-ethereum/internal/utesting"
+	"github.com/ethereum/go-ethereum/p2p/discover/v5wire"
+	"github.com/ethereum/go-ethereum/p2p/enode"
+	"github.com/ethereum/go-ethereum/p2p/netutil"
 )
 
 // Suite is the discv5 test suite.
@@ -266,7 +267,7 @@ func (s *Suite) TestFindnodeResults(t *utesting.T) {
 		n := bn.conn.localNode.Node()
 		expect[n.ID()] = n
 		d := uint(enode.LogDist(n.ID(), s.Dest.ID()))
-		if !containsUint(dists, d) {
+		if !slices.Contains(dists, d) {
 			dists = append(dists, d)
 		}
 	}

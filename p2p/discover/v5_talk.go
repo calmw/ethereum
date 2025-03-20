@@ -18,12 +18,13 @@ package discover
 
 import (
 	"net"
+	"net/netip"
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/p2p/discover/v5wire"
-	"github.com/calmw/ethereum/p2p/enode"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/p2p/discover/v5wire"
+	"github.com/ethereum/go-ethereum/p2p/enode"
 )
 
 // This is a limit for the number of concurrent talk requests.
@@ -70,7 +71,7 @@ func (t *talkSystem) register(protocol string, handler TalkRequestHandler) {
 }
 
 // handleRequest handles a talk request.
-func (t *talkSystem) handleRequest(id enode.ID, addr *net.UDPAddr, req *v5wire.TalkRequest) {
+func (t *talkSystem) handleRequest(id enode.ID, addr netip.AddrPort, req *v5wire.TalkRequest) {
 	t.mutex.Lock()
 	handler, ok := t.handlers[req.Protocol]
 	t.mutex.Unlock()
@@ -88,7 +89,8 @@ func (t *talkSystem) handleRequest(id enode.ID, addr *net.UDPAddr, req *v5wire.T
 	case <-t.slots:
 		go func() {
 			defer func() { t.slots <- struct{}{} }()
-			respMessage := handler(id, addr, req.Message)
+			udpAddr := &net.UDPAddr{IP: addr.Addr().AsSlice(), Port: int(addr.Port())}
+			respMessage := handler(id, udpAddr, req.Message)
 			resp := &v5wire.TalkResponse{ReqID: req.ReqID, Message: respMessage}
 			t.transport.sendFromAnotherThread(id, addr, resp)
 		}()

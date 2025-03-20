@@ -20,8 +20,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 func newTestFullNode(v []byte) []interface{} {

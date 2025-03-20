@@ -17,16 +17,14 @@
 package state
 
 import (
-	"bytes"
-
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/ethdb"
-	"github.com/calmw/ethereum/rlp"
-	"github.com/calmw/ethereum/trie"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ethereum/go-ethereum/trie"
 )
 
-// NewStateSync create a new state trie download scheduler.
+// NewStateSync creates a new state trie download scheduler.
 func NewStateSync(root common.Hash, database ethdb.KeyValueReader, onLeaf func(keys [][]byte, leaf []byte) error, scheme string) *trie.Sync {
 	// Register the storage slot callback if the external callback is specified.
 	var onSlot func(keys [][]byte, path []byte, leaf []byte, parent common.Hash, parentPath []byte) error
@@ -45,7 +43,7 @@ func NewStateSync(root common.Hash, database ethdb.KeyValueReader, onLeaf func(k
 			}
 		}
 		var obj types.StateAccount
-		if err := rlp.Decode(bytes.NewReader(leaf), &obj); err != nil {
+		if err := rlp.DecodeBytes(leaf, &obj); err != nil {
 			return err
 		}
 		syncer.AddSubTrie(obj.Root, path, parent, parentPath, onSlot)

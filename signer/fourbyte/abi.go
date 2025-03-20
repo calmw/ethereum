@@ -22,8 +22,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/calmw/ethereum/accounts/abi"
-	"github.com/calmw/ethereum/common"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // decodedCallData is an internal type to represent a method call parsed according
@@ -98,7 +98,7 @@ func parseCallData(calldata []byte, unescapedAbidata string) (*decodedCallData, 
 	if len(argdata)%32 != 0 {
 		return nil, fmt.Errorf("invalid call data; length should be a multiple of 32 bytes (was %d)", len(argdata))
 	}
-	// Validate the called method and upack the call data accordingly
+	// Validate the called method and unpack the call data accordingly
 	abispec, err := abi.JSON(strings.NewReader(unescapedAbidata))
 	if err != nil {
 		return nil, fmt.Errorf("invalid method signature (%q): %v", unescapedAbidata, err)

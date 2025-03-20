@@ -41,10 +41,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/accounts"
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/event"
-	"github.com/calmw/ethereum/log"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
 	pcsc "github.com/gballet/go-libpcsclite"
 )
 
@@ -95,6 +95,7 @@ func (hub *Hub) readPairings() error {
 		}
 		return err
 	}
+	defer pairingFile.Close()
 
 	pairingData, err := io.ReadAll(pairingFile)
 	if err != nil {
@@ -241,7 +242,7 @@ func (hub *Hub) refreshWallets() {
 			card.Disconnect(pcsc.LeaveCard)
 			continue
 		}
-		// Card connected, start tracking in amongs the wallets
+		// Card connected, start tracking among the wallets
 		hub.wallets[reader] = wallet
 		events = append(events, accounts.WalletEvent{Wallet: wallet, Kind: accounts.WalletArrived})
 	}

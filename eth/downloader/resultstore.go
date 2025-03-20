@@ -21,7 +21,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/calmw/ethereum/core/types"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 // resultStore implements a structure for maintaining fetchResults, tracking their
@@ -142,7 +142,7 @@ func (r *resultStore) HasCompletedItems() bool {
 // countCompleted returns the number of items ready for delivery, stopping at
 // the first non-complete item.
 //
-// The mthod assumes (at least) rlock is held.
+// The method assumes (at least) rlock is held.
 func (r *resultStore) countCompleted() int {
 	// We iterate from the already known complete point, and see
 	// if any more has completed since last count

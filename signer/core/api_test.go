@@ -26,17 +26,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/calmw/ethereum/accounts"
-	"github.com/calmw/ethereum/accounts/keystore"
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/internal/ethapi"
-	"github.com/calmw/ethereum/rlp"
-	"github.com/calmw/ethereum/signer/core"
-	"github.com/calmw/ethereum/signer/core/apitypes"
-	"github.com/calmw/ethereum/signer/fourbyte"
-	"github.com/calmw/ethereum/signer/storage"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/internal/ethapi"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ethereum/go-ethereum/signer/core"
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/ethereum/go-ethereum/signer/fourbyte"
+	"github.com/ethereum/go-ethereum/signer/storage"
 )
 
 // Used for testing
@@ -169,6 +169,7 @@ func list(ui *headlessUi, api *core.SignerAPI, t *testing.T) ([]common.Address, 
 }
 
 func TestNewAcc(t *testing.T) {
+	t.Parallel()
 	api, control := setup(t)
 	verifyNum := func(num int) {
 		list, err := list(control, api, t)
@@ -235,6 +236,7 @@ func mkTestTx(from common.MixedcaseAddress) apitypes.SendTxArgs {
 }
 
 func TestSignTx(t *testing.T) {
+	t.Parallel()
 	var (
 		list      []common.Address
 		res, res2 *ethapi.SignTransactionResult
@@ -282,7 +284,7 @@ func TestSignTx(t *testing.T) {
 		t.Fatal(err)
 	}
 	parsedTx := &types.Transaction{}
-	rlp.Decode(bytes.NewReader(res.Raw), parsedTx)
+	rlp.DecodeBytes(res.Raw, parsedTx)
 
 	//The tx should NOT be modified by the UI
 	if parsedTx.Value().Cmp(tx.Value.ToInt()) != 0 {
@@ -308,7 +310,7 @@ func TestSignTx(t *testing.T) {
 		t.Fatal(err)
 	}
 	parsedTx2 := &types.Transaction{}
-	rlp.Decode(bytes.NewReader(res.Raw), parsedTx2)
+	rlp.DecodeBytes(res.Raw, parsedTx2)
 
 	//The tx should be modified by the UI
 	if parsedTx2.Value().Cmp(tx.Value.ToInt()) != 0 {

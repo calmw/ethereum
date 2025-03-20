@@ -17,10 +17,10 @@
 package eth
 
 import (
-	"github.com/calmw/ethereum/core"
-	"github.com/calmw/ethereum/core/forkid"
-	"github.com/calmw/ethereum/p2p/enode"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/core/forkid"
+	"github.com/ethereum/go-ethereum/p2p/enode"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 // enrEntry is the ENR entry which advertises `eth` protocol on the discovery.
@@ -42,6 +42,7 @@ func StartENRUpdater(chain *core.BlockChain, ln *enode.LocalNode) {
 	var newHead = make(chan core.ChainHeadEvent, 10)
 	sub := chain.SubscribeChainHeadEvent(newHead)
 
+	ln.Set(currentENREntry(chain))
 	go func() {
 		defer sub.Unsubscribe()
 		for {
@@ -61,6 +62,20 @@ func StartENRUpdater(chain *core.BlockChain, ln *enode.LocalNode) {
 func currentENREntry(chain *core.BlockChain) *enrEntry {
 	head := chain.CurrentHeader()
 	return &enrEntry{
-		ForkID: forkid.NewID(chain.Config(), chain.Genesis().Hash(), head.Number.Uint64(), head.Time),
+		ForkID: forkid.NewID(chain.Config(), chain.Genesis(), head.Number.Uint64(), head.Time),
+	}
+}
+
+// NewNodeFilter returns a filtering function that returns whether the provided
+// enode advertises a forkid compatible with the current chain.
+func NewNodeFilter(chain *core.BlockChain) func(*enode.Node) bool {
+	filter := forkid.NewFilter(chain)
+	return func(n *enode.Node) bool {
+		var entry enrEntry
+		if err := n.Load(&entry); err != nil {
+			return false
+		}
+		err := filter(entry.ForkID)
+		return err == nil
 	}
 }

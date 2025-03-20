@@ -18,16 +18,17 @@ package rules
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 
-	"github.com/calmw/ethereum/internal/ethapi"
-	"github.com/calmw/ethereum/internal/jsre/deps"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/signer/core"
-	"github.com/calmw/ethereum/signer/storage"
 	"github.com/dop251/goja"
+	"github.com/ethereum/go-ethereum/internal/ethapi"
+	"github.com/ethereum/go-ethereum/internal/jsre/deps"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/signer/core"
+	"github.com/ethereum/go-ethereum/signer/storage"
 )
 
 // consoleOutput is an override for the console.log and console.error methods to
@@ -146,7 +147,7 @@ func (r *rulesetUI) checkApproval(jsfunc string, jsarg []byte, err error) (bool,
 		log.Info("Op rejected")
 		return false, nil
 	}
-	return false, fmt.Errorf("unknown response")
+	return false, errors.New("unknown response")
 }
 
 func (r *rulesetUI) ApproveTx(request *core.SignTxRequest) (core.SignTxResponse, error) {

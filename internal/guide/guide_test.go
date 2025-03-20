@@ -28,13 +28,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/calmw/ethereum/accounts/keystore"
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/types"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 // Tests that the account management snippets work correctly.
 func TestAccountManagement(t *testing.T) {
+	t.Parallel()
+
 	// Create a temporary folder to work with
 	workdir := t.TempDir()
 

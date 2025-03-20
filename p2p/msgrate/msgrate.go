@@ -18,13 +18,14 @@
 package msgrate
 
 import (
+	"context"
 	"errors"
 	"math"
 	"sort"
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/log"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 // measurementImpact is the impact a single measurement has on a peer's final
@@ -410,7 +411,9 @@ func (t *Trackers) tune() {
 
 	t.tuned = time.Now()
 	t.log.Debug("Recalculated msgrate QoS values", "rtt", t.roundtrip, "confidence", t.confidence, "ttl", t.targetTimeout(), "next", t.tuned.Add(t.roundtrip))
-	t.log.Trace("Debug dump of mean capacities", "caps", log.Lazy{Fn: t.meanCapacities})
+	if t.log.Enabled(context.Background(), log.LevelTrace) {
+		t.log.Trace("Debug dump of mean capacities", "caps", t.meanCapacities())
+	}
 }
 
 // detune reduces the tracker's confidence in order to make fresh measurements

@@ -21,7 +21,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/calmw/ethereum/common/mclock"
+	"github.com/ethereum/go-ethereum/common/mclock"
 )
 
 // Subscription represents a stream of events. The carrier of the events is typically a
@@ -120,7 +120,7 @@ func ResubscribeErr(backoffMax time.Duration, fn ResubscribeErrFunc) Subscriptio
 		backoffMax: backoffMax,
 		fn:         fn,
 		err:        make(chan error),
-		unsub:      make(chan struct{}),
+		unsub:      make(chan struct{}, 1),
 	}
 	go s.loop()
 	return s

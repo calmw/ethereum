@@ -18,10 +18,11 @@ package types
 
 import (
 	"bytes"
+	"reflect"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 //go:generate go run github.com/fjl/gencodec -type Withdrawal -field-override withdrawalMarshaling -out gen_withdrawal_json.go
@@ -47,6 +48,12 @@ type Withdrawals []*Withdrawal
 
 // Len returns the length of s.
 func (s Withdrawals) Len() int { return len(s) }
+
+var withdrawalSize = int(reflect.TypeOf(Withdrawal{}).Size())
+
+func (s Withdrawals) Size() int {
+	return withdrawalSize * len(s)
+}
 
 // EncodeIndex encodes the i'th withdrawal to w. Note that this does not check for errors
 // because we assume that *Withdrawal will only ever contain valid withdrawals that were either

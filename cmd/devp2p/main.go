@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/calmw/ethereum/internal/debug"
-	"github.com/calmw/ethereum/internal/flags"
-	"github.com/calmw/ethereum/p2p/enode"
+	"github.com/ethereum/go-ethereum/internal/debug"
+	"github.com/ethereum/go-ethereum/internal/flags"
+	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/urfave/cli/v2"
 )
 
@@ -66,9 +66,15 @@ func commandHasFlag(ctx *cli.Context, flag cli.Flag) bool {
 	for _, name := range names {
 		set[name] = struct{}{}
 	}
-	for _, fn := range ctx.FlagNames() {
-		if _, ok := set[fn]; ok {
-			return true
+	for _, ctx := range ctx.Lineage() {
+		if ctx.Command != nil {
+			for _, f := range ctx.Command.Flags {
+				for _, name := range f.Names() {
+					if _, ok := set[name]; ok {
+						return true
+					}
+				}
+			}
 		}
 	}
 	return false

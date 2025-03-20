@@ -17,8 +17,9 @@
 package trie
 
 import (
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/trie/trienode"
+	"maps"
+
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // tracer tracks the changes of trie nodes. During the trie operations,
@@ -93,37 +94,29 @@ func (t *tracer) reset() {
 
 // copy returns a deep copied tracer instance.
 func (t *tracer) copy() *tracer {
-	var (
-		inserts    = make(map[string]struct{})
-		deletes    = make(map[string]struct{})
-		accessList = make(map[string][]byte)
-	)
-	for path := range t.inserts {
-		inserts[path] = struct{}{}
-	}
-	for path := range t.deletes {
-		deletes[path] = struct{}{}
-	}
+	accessList := make(map[string][]byte, len(t.accessList))
 	for path, blob := range t.accessList {
 		accessList[path] = common.CopyBytes(blob)
 	}
 	return &tracer{
-		inserts:    inserts,
-		deletes:    deletes,
+		inserts:    maps.Clone(t.inserts),
+		deletes:    maps.Clone(t.deletes),
 		accessList: accessList,
 	}
 }
 
-// markDeletions puts all tracked deletions into the provided nodeset.
-func (t *tracer) markDeletions(set *trienode.NodeSet) {
+// deletedNodes returns a list of node paths which are deleted from the trie.
+func (t *tracer) deletedNodes() []string {
+	var paths []string
 	for path := range t.deletes {
 		// It's possible a few deleted nodes were embedded
 		// in their parent before, the deletions can be no
 		// effect by deleting nothing, filter them out.
-		prev, ok := t.accessList[path]
+		_, ok := t.accessList[path]
 		if !ok {
 			continue
 		}
-		set.AddNode([]byte(path), trienode.NewWithPrev(common.Hash{}, nil, prev))
+		paths = append(paths, path)
 	}
+	return paths
 }

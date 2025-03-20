@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/rawdb"
-	"github.com/calmw/ethereum/core/types"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/rawdb"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 // Runs multiple tests with randomized parameters.
@@ -228,7 +228,7 @@ func (b *testChainIndexBackend) Process(ctx context.Context, header *types.Heade
 		b.t.Error("Unexpected call to Process")
 		// Can't use Fatal since this is not the test's goroutine.
 		// Returning error stops the chainIndexer's updateLoop
-		return errors.New("Unexpected call to Process")
+		return errors.New("unexpected call to Process")
 	case b.processCh <- header.Number.Uint64():
 	}
 	return nil

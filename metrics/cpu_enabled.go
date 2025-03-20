@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-//go:build !ios && !js
-// +build !ios,!js
+//go:build !ios && !js && !wasip1
+// +build !ios,!js,!wasip1
 
 package metrics
 
 import (
-	"github.com/calmw/ethereum/log"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/shirou/gopsutil/cpu"
 )
 

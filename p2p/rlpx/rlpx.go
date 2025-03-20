@@ -22,7 +22,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/ecdsa"
-	"crypto/elliptic"
 	"crypto/hmac"
 	"crypto/rand"
 	"encoding/binary"
@@ -34,9 +33,9 @@ import (
 	"net"
 	"time"
 
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/crypto/ecies"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/crypto/ecies"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/golang/snappy"
 	"golang.org/x/crypto/sha3"
 )
@@ -605,6 +604,11 @@ func (h *handshakeState) readMsg(msg interface{}, prv *ecdsa.PrivateKey, r io.Re
 	}
 	size := binary.BigEndian.Uint16(prefix)
 
+	// baseProtocolMaxMsgSize = 2 * 1024
+	if size > 2048 {
+		return nil, errors.New("message too big")
+	}
+
 	// Read the handshake packet.
 	packet, err := h.rbuf.read(r, int(size))
 	if err != nil {
@@ -664,7 +668,10 @@ func exportPubkey(pub *ecies.PublicKey) []byte {
 	if pub == nil {
 		panic("nil pubkey")
 	}
-	return elliptic.Marshal(pub.Curve, pub.X, pub.Y)[1:]
+	if curve, ok := pub.Curve.(crypto.EllipticCurve); ok {
+		return curve.Marshal(pub.X, pub.Y)[1:]
+	}
+	return []byte{}
 }
 
 func xor(one, other []byte) (xor []byte) {

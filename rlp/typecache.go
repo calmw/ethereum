@@ -18,11 +18,12 @@ package rlp
 
 import (
 	"fmt"
+	"maps"
 	"reflect"
 	"sync"
 	"sync/atomic"
 
-	"github.com/calmw/ethereum/rlp/internal/rlpstruct"
+	"github.com/ethereum/go-ethereum/rlp/internal/rlpstruct"
 )
 
 // typeinfo is an entry in the type cache.
@@ -90,10 +91,7 @@ func (c *typeCache) generate(typ reflect.Type, tags rlpstruct.Tags) *typeinfo {
 	}
 
 	// Copy cur to next.
-	c.next = make(map[typekey]*typeinfo, len(cur)+1)
-	for k, v := range cur {
-		c.next[k] = v
-	}
+	c.next = maps.Clone(cur)
 
 	// Generate.
 	info := c.infoWhileGenerating(typ, tags)

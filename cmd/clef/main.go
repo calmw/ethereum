@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+	"net"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -34,25 +35,25 @@ import (
 	"strings"
 	"time"
 
-	"github.com/calmw/ethereum/accounts"
-	"github.com/calmw/ethereum/accounts/keystore"
-	"github.com/calmw/ethereum/cmd/utils"
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/internal/ethapi"
-	"github.com/calmw/ethereum/internal/flags"
-	"github.com/calmw/ethereum/log"
-	"github.com/calmw/ethereum/node"
-	"github.com/calmw/ethereum/params"
-	"github.com/calmw/ethereum/rlp"
-	"github.com/calmw/ethereum/rpc"
-	"github.com/calmw/ethereum/signer/core"
-	"github.com/calmw/ethereum/signer/core/apitypes"
-	"github.com/calmw/ethereum/signer/fourbyte"
-	"github.com/calmw/ethereum/signer/rules"
-	"github.com/calmw/ethereum/signer/storage"
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
+	"github.com/ethereum/go-ethereum/cmd/utils"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/internal/ethapi"
+	"github.com/ethereum/go-ethereum/internal/flags"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/node"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/ethereum/go-ethereum/signer/core"
+	"github.com/ethereum/go-ethereum/signer/core/apitypes"
+	"github.com/ethereum/go-ethereum/signer/fourbyte"
+	"github.com/ethereum/go-ethereum/signer/rules"
+	"github.com/ethereum/go-ethereum/signer/storage"
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/urfave/cli/v2"
@@ -99,7 +100,7 @@ var (
 	chainIdFlag = &cli.Int64Flag{
 		Name:  "chainid",
 		Value: params.MainnetChainConfig.ChainID.Int64(),
-		Usage: "Chain id to use for signing (1=mainnet, 4=Rinkeby, 5=Goerli)",
+		Usage: "Chain id to use for signing (1=mainnet, 17000=Holesky)",
 	}
 	rpcPortFlag = &cli.IntFlag{
 		Name:     "http.port",
@@ -326,7 +327,7 @@ func initializeSecrets(c *cli.Context) error {
 		return err
 	}
 	if num != len(masterSeed) {
-		return fmt.Errorf("failed to read enough random")
+		return errors.New("failed to read enough random")
 	}
 	n, p := keystore.StandardScryptN, keystore.StandardScryptP
 	if c.Bool(utils.LightKDFFlag.Name) {
@@ -482,7 +483,7 @@ func initialize(c *cli.Context) error {
 		}
 	} else if !c.Bool(acceptFlag.Name) {
 		if !confirm(legalWarning) {
-			return fmt.Errorf("aborted by user")
+			return errors.New("aborted by user")
 		}
 		fmt.Println()
 	}
@@ -491,7 +492,8 @@ func initialize(c *cli.Context) error {
 	if usecolor {
 		output = colorable.NewColorable(logOutput)
 	}
-	log.Root().SetHandler(log.LvlFilterHandler(log.Lvl(c.Int(logLevelFlag.Name)), log.StreamHandler(output, log.TerminalFormat(usecolor))))
+	verbosity := log.FromLegacyLevel(c.Int(logLevelFlag.Name))
+	log.SetDefault(log.NewLogger(log.NewTerminalHandlerWithLevel(output, verbosity, usecolor)))
 
 	return nil
 }
@@ -550,7 +552,7 @@ func listWallets(c *cli.Context) error {
 // accountImport imports a raw hexadecimal private key via CLI.
 func accountImport(c *cli.Context) error {
 	if c.Args().Len() != 1 {
-		return errors.New("<keyfile> must be given as first argument.")
+		return errors.New("<keyfile> must be given as first argument")
 	}
 	internalApi, ui, err := initInternalApi(c)
 	if err != nil {
@@ -580,6 +582,7 @@ func accountImport(c *cli.Context) error {
 		return err
 	}
 	if first != second {
+		//lint:ignore ST1005 This is a message for the user
 		return errors.New("Passwords do not match")
 	}
 	acc, err := internalApi.ImportRawKey(hex.EncodeToString(crypto.FromECDSA(pKey)), first)
@@ -590,7 +593,7 @@ func accountImport(c *cli.Context) error {
   Address %v
   Keystore file: %v
 
-The key is now encrypted; losing the password will result in permanently losing 
+The key is now encrypted; losing the password will result in permanently losing
 access to the key and all associated funds!
 
 Make sure to backup keystore and passwords in a safe location.`,
@@ -701,6 +704,7 @@ func signer(c *cli.Context) error {
 	log.Info("Starting signer", "chainid", chainId, "keystore", ksLoc,
 		"light-kdf", lightKdf, "advanced", advanced)
 	am := core.StartClefAccountManager(ksLoc, nousb, lightKdf, scpath)
+	defer am.Close()
 	apiImpl := core.NewSignerAPI(am, chainId, nousb, ui, db, advanced, pwStorage)
 
 	// Establish the bidirectional communication, by creating a new UI backend and registering
@@ -732,6 +736,7 @@ func signer(c *cli.Context) error {
 		cors := utils.SplitAndTrim(c.String(utils.HTTPCORSDomainFlag.Name))
 
 		srv := rpc.NewServer()
+		srv.SetBatchLimits(node.DefaultConfig.BatchRequestLimit, node.DefaultConfig.BatchResponseMaxSize)
 		err := node.RegisterApis(rpcAPI, []string{"account"}, srv)
 		if err != nil {
 			utils.Fatalf("Could not register API: %w", err)
@@ -742,7 +747,7 @@ func signer(c *cli.Context) error {
 		port := c.Int(rpcPortFlag.Name)
 
 		// start http server
-		httpEndpoint := fmt.Sprintf("%s:%d", c.String(utils.HTTPListenAddrFlag.Name), port)
+		httpEndpoint := net.JoinHostPort(c.String(utils.HTTPListenAddrFlag.Name), fmt.Sprintf("%d", port))
 		httpServer, addr, err := node.StartHTTPEndpoint(httpEndpoint, rpc.DefaultHTTPTimeouts, handler)
 		if err != nil {
 			utils.Fatalf("Could not start RPC api: %v", err)
@@ -844,7 +849,7 @@ func readMasterKey(ctx *cli.Context, ui core.UIClientAPI) ([]byte, error) {
 	}
 	masterSeed, err := decryptSeed(cipherKey, password)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decrypt the master seed of clef")
+		return nil, errors.New("failed to decrypt the master seed of clef")
 	}
 	if len(masterSeed) < 256 {
 		return nil, fmt.Errorf("master seed of insufficient length, expected >255 bytes, got %d", len(masterSeed))
@@ -1204,7 +1209,7 @@ func GenDoc(ctx *cli.Context) error {
 						URL:     accounts.URL{Path: ".. ignored .."},
 					},
 					{
-						Address: common.HexToAddress("0xffffffffffffffffffffffffffffffffffffffff"),
+						Address: common.MaxAddress,
 					},
 				}})
 	}

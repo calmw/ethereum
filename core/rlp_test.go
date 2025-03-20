@@ -21,12 +21,12 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/consensus/ethash"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/params"
-	"github.com/calmw/ethereum/rlp"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus/ethash"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rlp"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -41,7 +41,7 @@ func getBlock(transactions int, uncles int, dataSize int) *types.Block {
 		funds   = big.NewInt(1_000_000_000_000_000_000)
 		gspec   = &Genesis{
 			Config: params.TestChainConfig,
-			Alloc:  GenesisAlloc{address: {Balance: funds}},
+			Alloc:  types.GenesisAlloc{address: {Balance: funds}},
 		}
 	)
 	// We need to generate as many blocks +1 as uncles

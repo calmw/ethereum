@@ -23,8 +23,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/p2p"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/p2p"
 )
 
 // Tests that datadirs can be successfully created, be them manually configured
@@ -53,13 +53,12 @@ func TestDatadirCreation(t *testing.T) {
 		t.Fatalf("freshly created datadir not accessible: %v", err)
 	}
 	// Verify that an impossible datadir fails creation
-	file, err := os.CreateTemp("", "")
+	file, err := os.CreateTemp(t.TempDir(), "")
 	if err != nil {
 		t.Fatalf("failed to create temporary file: %v", err)
 	}
 	defer func() {
 		file.Close()
-		os.Remove(file.Name())
 	}()
 
 	dir = filepath.Join(file.Name(), "invalid/path")

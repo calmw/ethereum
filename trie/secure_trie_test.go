@@ -23,22 +23,22 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/rawdb"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/trie/trienode"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/rawdb"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/trie/trienode"
 )
 
 func newEmptySecure() *StateTrie {
-	trie, _ := NewStateTrie(TrieID(types.EmptyRootHash), NewDatabase(rawdb.NewMemoryDatabase()))
+	trie, _ := NewStateTrie(TrieID(types.EmptyRootHash), newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.HashScheme))
 	return trie
 }
 
 // makeTestStateTrie creates a large enough secure trie for testing.
-func makeTestStateTrie() (*Database, *StateTrie, map[string][]byte) {
+func makeTestStateTrie() (*testDb, *StateTrie, map[string][]byte) {
 	// Create an empty trie
-	triedb := NewDatabase(rawdb.NewMemoryDatabase())
+	triedb := newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.HashScheme)
 	trie, _ := NewStateTrie(TrieID(types.EmptyRootHash), triedb)
 
 	// Fill it with some arbitrary data

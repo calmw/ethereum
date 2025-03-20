@@ -19,17 +19,18 @@ package core
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/core/rawdb"
-	"github.com/calmw/ethereum/core/types"
-	"github.com/calmw/ethereum/ethdb"
-	"github.com/calmw/ethereum/event"
-	"github.com/calmw/ethereum/log"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/rawdb"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 // ChainIndexerBackend defines the methods needed to process chain segments in
@@ -221,20 +222,19 @@ func (c *ChainIndexer) eventLoop(currentHeader *types.Header, events chan ChainH
 				errc <- nil
 				return
 			}
-			header := ev.Block.Header()
-			if header.ParentHash != prevHash {
+			if ev.Header.ParentHash != prevHash {
 				// Reorg to the common ancestor if needed (might not exist in light sync mode, skip reorg then)
 				// TODO(karalabe, zsfelfoldi): This seems a bit brittle, can we detect this case explicitly?
 
 				if rawdb.ReadCanonicalHash(c.chainDb, prevHeader.Number.Uint64()) != prevHash {
-					if h := rawdb.FindCommonAncestor(c.chainDb, prevHeader, header); h != nil {
+					if h := rawdb.FindCommonAncestor(c.chainDb, prevHeader, ev.Header); h != nil {
 						c.newHead(h.Number.Uint64(), true)
 					}
 				}
 			}
-			c.newHead(header.Number.Uint64(), false)
+			c.newHead(ev.Header.Number.Uint64(), false)
 
-			prevHeader, prevHash = header, header.Hash()
+			prevHeader, prevHash = ev.Header, ev.Header.Hash()
 		}
 	}
 }
@@ -403,7 +403,7 @@ func (c *ChainIndexer) processSection(section uint64, lastHead common.Hash) (com
 		if header == nil {
 			return common.Hash{}, fmt.Errorf("block #%d [%x..] not found", number, hash[:4])
 		} else if header.ParentHash != lastHead {
-			return common.Hash{}, fmt.Errorf("chain reorged during section processing")
+			return common.Hash{}, errors.New("chain reorged during section processing")
 		}
 		if err := c.backend.Process(c.ctx, header); err != nil {
 			return common.Hash{}, err

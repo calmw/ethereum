@@ -28,11 +28,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/calmw/ethereum/crypto"
-	"github.com/calmw/ethereum/crypto/ecies"
-	"github.com/calmw/ethereum/p2p/simulations/pipes"
-	"github.com/calmw/ethereum/rlp"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/crypto/ecies"
+	"github.com/ethereum/go-ethereum/p2p/pipes"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -421,7 +421,7 @@ func BenchmarkThroughput(b *testing.B) {
 	}
 	conn2.SetSnappy(true)
 	if err := <-handshakeDone; err != nil {
-		b.Fatal("server hanshake error:", err)
+		b.Fatal("server handshake error:", err)
 	}
 
 	// Read N messages.

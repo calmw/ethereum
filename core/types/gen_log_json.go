@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/calmw/ethereum/common"
-	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 )
 
 var _ = (*logMarshaling)(nil)
@@ -18,12 +18,12 @@ func (l Log) MarshalJSON() ([]byte, error) {
 		Address     common.Address `json:"address" gencodec:"required"`
 		Topics      []common.Hash  `json:"topics" gencodec:"required"`
 		Data        hexutil.Bytes  `json:"data" gencodec:"required"`
-		BlockNumber hexutil.Uint64 `json:"blockNumber"`
-		TxHash      common.Hash    `json:"transactionHash" gencodec:"required"`
-		TxIndex     hexutil.Uint   `json:"transactionIndex"`
-		BlockHash   common.Hash    `json:"blockHash"`
-		Index       hexutil.Uint   `json:"logIndex"`
-		Removed     bool           `json:"removed"`
+		BlockNumber hexutil.Uint64 `json:"blockNumber" rlp:"-"`
+		TxHash      common.Hash    `json:"transactionHash" gencodec:"required" rlp:"-"`
+		TxIndex     hexutil.Uint   `json:"transactionIndex" rlp:"-"`
+		BlockHash   common.Hash    `json:"blockHash" rlp:"-"`
+		Index       hexutil.Uint   `json:"logIndex" rlp:"-"`
+		Removed     bool           `json:"removed" rlp:"-"`
 	}
 	var enc Log
 	enc.Address = l.Address
@@ -44,12 +44,12 @@ func (l *Log) UnmarshalJSON(input []byte) error {
 		Address     *common.Address `json:"address" gencodec:"required"`
 		Topics      []common.Hash   `json:"topics" gencodec:"required"`
 		Data        *hexutil.Bytes  `json:"data" gencodec:"required"`
-		BlockNumber *hexutil.Uint64 `json:"blockNumber"`
-		TxHash      *common.Hash    `json:"transactionHash" gencodec:"required"`
-		TxIndex     *hexutil.Uint   `json:"transactionIndex"`
-		BlockHash   *common.Hash    `json:"blockHash"`
-		Index       *hexutil.Uint   `json:"logIndex"`
-		Removed     *bool           `json:"removed"`
+		BlockNumber *hexutil.Uint64 `json:"blockNumber" rlp:"-"`
+		TxHash      *common.Hash    `json:"transactionHash" gencodec:"required" rlp:"-"`
+		TxIndex     *hexutil.Uint   `json:"transactionIndex" rlp:"-"`
+		BlockHash   *common.Hash    `json:"blockHash" rlp:"-"`
+		Index       *hexutil.Uint   `json:"logIndex" rlp:"-"`
+		Removed     *bool           `json:"removed" rlp:"-"`
 	}
 	var dec Log
 	if err := json.Unmarshal(input, &dec); err != nil {

@@ -22,13 +22,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/calmw/ethereum/common"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // TestExport does a basic test of "geth export", exporting the test-genesis.
 func TestExport(t *testing.T) {
-	outfile := fmt.Sprintf("%v/testExport.out", os.TempDir())
-	defer os.Remove(outfile)
+	t.Parallel()
+	outfile := fmt.Sprintf("%v/testExport.out", t.TempDir())
 	geth := runGeth(t, "--datadir", initGeth(t), "export", outfile)
 	geth.WaitExit()
 	if have, want := geth.ExitStatus(), 0; have != want {

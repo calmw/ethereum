@@ -17,10 +17,9 @@
 package misc
 
 import (
-	"errors"
 	"fmt"
 
-	"github.com/calmw/ethereum/params"
+	"github.com/ethereum/go-ethereum/params"
 )
 
 // VerifyGaslimit verifies the header gas limit according increase/decrease
@@ -36,7 +35,7 @@ func VerifyGaslimit(parentGasLimit, headerGasLimit uint64) error {
 		return fmt.Errorf("invalid gas limit: have %d, want %d +-= %d", headerGasLimit, parentGasLimit, limit-1)
 	}
 	if headerGasLimit < params.MinGasLimit {
-		return errors.New("invalid gas limit below 5000")
+		return fmt.Errorf("invalid gas limit below %d", params.MinGasLimit)
 	}
 	return nil
 }
