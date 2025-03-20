@@ -19,13 +19,13 @@ package core
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus"
-	"github.com/ethereum/go-ethereum/consensus/misc/eip4844"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/consensus"
+	"github.com/calmw/ethereum/consensus/misc/eip4844"
+	"github.com/calmw/ethereum/core/tracing"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/core/vm"
+	"github.com/calmw/ethereum/params"
 	"github.com/holiman/uint256"
 )
 

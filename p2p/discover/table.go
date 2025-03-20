@@ -30,12 +30,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/netutil"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/mclock"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/metrics"
+	"github.com/calmw/ethereum/p2p/enode"
+	"github.com/calmw/ethereum/p2p/netutil"
 )
 
 const (

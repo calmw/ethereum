@@ -20,8 +20,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/log"
 )
 
 const (

@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/params/forks"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/params/forks"
 )
 
 var (

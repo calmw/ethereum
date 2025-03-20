@@ -17,9 +17,9 @@
 package filtermaps
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/log"
 )
 
 // blockchain represents the underlying blockchain of ChainView.

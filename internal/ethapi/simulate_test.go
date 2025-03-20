@@ -20,9 +20,9 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/internal/ethapi/override"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/internal/ethapi/override"
 )
 
 func TestSimulateSanitizeBlockOrder(t *testing.T) {

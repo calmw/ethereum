@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/internal/flags"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/calmw/ethereum/ethclient"
+	"github.com/calmw/ethereum/internal/debug"
+	"github.com/calmw/ethereum/internal/flags"
+	"github.com/calmw/ethereum/rpc"
 	"github.com/urfave/cli/v2"
 )
 

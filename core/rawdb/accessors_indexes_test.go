@@ -21,12 +21,12 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/internal/blocktest"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/internal/blocktest"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/rlp"
 )
 
 var newTestHasher = blocktest.NewHasher

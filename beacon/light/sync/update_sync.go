@@ -19,12 +19,12 @@ package sync
 import (
 	"sort"
 
-	"github.com/ethereum/go-ethereum/beacon/light"
-	"github.com/ethereum/go-ethereum/beacon/light/request"
-	"github.com/ethereum/go-ethereum/beacon/params"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/beacon/light"
+	"github.com/calmw/ethereum/beacon/light/request"
+	"github.com/calmw/ethereum/beacon/params"
+	"github.com/calmw/ethereum/beacon/types"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/log"
 )
 
 const maxUpdateRequest = 8 // maximum number of updates requested in a single request

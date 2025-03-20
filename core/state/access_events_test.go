@@ -19,9 +19,9 @@ package state
 import (
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/trie/utils"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/trie/utils"
 )
 
 var (

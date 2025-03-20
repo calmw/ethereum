@@ -22,8 +22,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/params/forks"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/params/forks"
 )
 
 // Genesis hashes to enforce below configs on.

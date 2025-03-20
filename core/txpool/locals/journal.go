@@ -22,10 +22,10 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/rlp"
 )
 
 // errNoActiveJournal is returned if a transaction is attempted to be inserted

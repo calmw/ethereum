@@ -26,10 +26,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/beacon/merkle"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/beacon/merkle"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/log"
 	"gopkg.in/yaml.v3"
 )
 

@@ -21,10 +21,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/internal/utesting"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/internal/utesting"
 )
 
 // historyTest is the content of a history test.

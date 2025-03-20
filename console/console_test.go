@@ -25,14 +25,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/console/prompt"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/internal/jsre"
-	"github.com/ethereum/go-ethereum/miner"
-	"github.com/ethereum/go-ethereum/node"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/console/prompt"
+	"github.com/calmw/ethereum/core"
+	"github.com/calmw/ethereum/eth"
+	"github.com/calmw/ethereum/eth/ethconfig"
+	"github.com/calmw/ethereum/internal/jsre"
+	"github.com/calmw/ethereum/miner"
+	"github.com/calmw/ethereum/node"
 )
 
 const (

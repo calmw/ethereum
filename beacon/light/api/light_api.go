@@ -28,13 +28,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/calmw/ethereum/beacon/merkle"
+	"github.com/calmw/ethereum/beacon/params"
+	"github.com/calmw/ethereum/beacon/types"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/log"
 	"github.com/donovanhide/eventsource"
-	"github.com/ethereum/go-ethereum/beacon/merkle"
-	"github.com/ethereum/go-ethereum/beacon/params"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/log"
 )
 
 var (

@@ -22,7 +22,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/calmw/ethereum/common"
 )
 
 type testTracer struct {

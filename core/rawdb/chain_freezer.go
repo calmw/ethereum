@@ -22,10 +22,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/params"
 )
 
 const (

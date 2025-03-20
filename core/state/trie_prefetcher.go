@@ -20,9 +20,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/metrics"
 )
 
 var (

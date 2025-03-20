@@ -24,11 +24,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/console/prompt"
+	"github.com/calmw/ethereum/internal/jsre"
+	"github.com/calmw/ethereum/rpc"
 	"github.com/dop251/goja"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/console/prompt"
-	"github.com/ethereum/go-ethereum/internal/jsre"
-	"github.com/ethereum/go-ethereum/rpc"
 )
 
 // bridge is a collection of JavaScript utility methods to bride the .js runtime

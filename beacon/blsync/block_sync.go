@@ -17,14 +17,14 @@
 package blsync
 
 import (
-	"github.com/ethereum/go-ethereum/beacon/light/request"
-	"github.com/ethereum/go-ethereum/beacon/light/sync"
-	"github.com/ethereum/go-ethereum/beacon/params"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/lru"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/beacon/light/request"
+	"github.com/calmw/ethereum/beacon/light/sync"
+	"github.com/calmw/ethereum/beacon/params"
+	"github.com/calmw/ethereum/beacon/types"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/lru"
+	"github.com/calmw/ethereum/event"
+	"github.com/calmw/ethereum/log"
 )
 
 // beaconBlockSync implements request.Module; it fetches the beacon blocks belonging

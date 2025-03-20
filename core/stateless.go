@@ -17,18 +17,18 @@
 package core
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/lru"
-	"github.com/ethereum/go-ethereum/consensus/beacon"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/stateless"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/trie"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/lru"
+	"github.com/calmw/ethereum/consensus/beacon"
+	"github.com/calmw/ethereum/consensus/ethash"
+	"github.com/calmw/ethereum/core/state"
+	"github.com/calmw/ethereum/core/stateless"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/core/vm"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/trie"
+	"github.com/calmw/ethereum/triedb"
 )
 
 // ExecuteStateless runs a stateless execution based on a witness, verifies

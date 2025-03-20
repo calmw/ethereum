@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/common/math"
+	"github.com/calmw/ethereum/params"
 )
 
 // memoryGasCost calculates the quadratic gas for memory expansion. It does so

@@ -8,12 +8,12 @@ import (
 	"strings"
 	"errors"
 
-	ethereum "github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/event"
+	ethereum "github.com/calmw/ethereum"
+	"github.com/calmw/ethereum/accounts/abi"
+	"github.com/calmw/ethereum/accounts/abi/bind"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/event"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

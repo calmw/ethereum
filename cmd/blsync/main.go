@@ -22,13 +22,13 @@ import (
 	"os"
 	"slices"
 
-	"github.com/ethereum/go-ethereum/beacon/blsync"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/internal/flags"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/calmw/ethereum/beacon/blsync"
+	"github.com/calmw/ethereum/cmd/utils"
+	"github.com/calmw/ethereum/internal/debug"
+	"github.com/calmw/ethereum/internal/flags"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/node"
+	"github.com/calmw/ethereum/rpc"
 	"github.com/urfave/cli/v2"
 )
 

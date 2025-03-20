@@ -21,8 +21,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/log"
 )
 
 const tmpSuffix = ".tmp"

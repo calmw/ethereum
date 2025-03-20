@@ -23,16 +23,16 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/consensus/ethash"
+	"github.com/calmw/ethereum/core/rawdb"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/core/vm"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/triedb"
+	"github.com/calmw/ethereum/triedb/pathdb"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/triedb"
-	"github.com/ethereum/go-ethereum/triedb/pathdb"
 )
 
 func TestSetupGenesis(t *testing.T) {

@@ -29,14 +29,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/consensus"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/ethdb/pebble"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/consensus"
+	"github.com/calmw/ethereum/consensus/ethash"
+	"github.com/calmw/ethereum/core/rawdb"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/core/vm"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/ethdb/pebble"
+	"github.com/calmw/ethereum/params"
 )
 
 // snapshotTestBasic wraps the common testing fields in the snapshot tests.

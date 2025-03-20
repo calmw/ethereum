@@ -23,9 +23,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/internal/testlog"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/common/mclock"
+	"github.com/calmw/ethereum/internal/testlog"
+	"github.com/calmw/ethereum/log"
 )
 
 func TestServerPortMapping(t *testing.T) {

@@ -25,10 +25,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/ethdb/memorydb"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/ethdb"
+	"github.com/calmw/ethereum/ethdb/memorydb"
+	"github.com/calmw/ethereum/log"
 	"github.com/olekukonko/tablewriter"
 )
 

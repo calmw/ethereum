@@ -20,10 +20,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/calmw/ethereum/accounts/abi"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/core"
+	"github.com/calmw/ethereum/core/vm"
 )
 
 // revertError is an API error that encompasses an EVM revert with JSON error

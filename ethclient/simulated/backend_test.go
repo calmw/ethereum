@@ -27,14 +27,14 @@ import (
 
 	"go.uber.org/goleak"
 
-	"github.com/ethereum/go-ethereum/crypto/kzg4844"
+	"github.com/calmw/ethereum/crypto/kzg4844"
 	"github.com/holiman/uint256"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/accounts/abi/bind"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/crypto"
+	"github.com/calmw/ethereum/params"
 )
 
 var _ bind.ContractBackend = (Client)(nil)

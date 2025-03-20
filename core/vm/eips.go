@@ -21,9 +21,9 @@ import (
 	"math"
 	"sort"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/tracing"
+	"github.com/calmw/ethereum/params"
 	"github.com/holiman/uint256"
 )
 

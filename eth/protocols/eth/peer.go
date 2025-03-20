@@ -19,11 +19,11 @@ package eth
 import (
 	"math/rand"
 
+	"github.com/calmw/ethereum/common"
+	"github.com/calmw/ethereum/core/types"
+	"github.com/calmw/ethereum/p2p"
+	"github.com/calmw/ethereum/rlp"
 	mapset "github.com/deckarep/golang-set/v2"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rlp"
 )
 
 const (

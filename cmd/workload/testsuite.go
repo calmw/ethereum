@@ -23,12 +23,12 @@ import (
 	"os"
 	"slices"
 
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/internal/flags"
-	"github.com/ethereum/go-ethereum/internal/utesting"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/calmw/ethereum/eth/ethconfig"
+	"github.com/calmw/ethereum/internal/flags"
+	"github.com/calmw/ethereum/internal/utesting"
+	"github.com/calmw/ethereum/log"
+	"github.com/calmw/ethereum/params"
+	"github.com/calmw/ethereum/rpc"
 	"github.com/urfave/cli/v2"
 )
 

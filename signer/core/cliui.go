@@ -25,10 +25,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/console/prompt"
-	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/calmw/ethereum/common/hexutil"
+	"github.com/calmw/ethereum/console/prompt"
+	"github.com/calmw/ethereum/internal/ethapi"
+	"github.com/calmw/ethereum/log"
 )
 
 type CommandlineUI struct {
