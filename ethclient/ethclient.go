@@ -106,6 +106,10 @@ func (ec *Client) BlockByNumber(ctx context.Context, number *big.Int) (*types.Bl
 	return ec.getBlock(ctx, "eth_getBlockByNumber", toBlockNumArg(number), true)
 }
 
+func (ec *Client) BlockRawMessageByNumber(ctx context.Context, number *big.Int) (json.RawMessage, error) {
+	return ec.getBlockRawMessage(ctx, "eth_getBlockByNumber", toBlockNumArg(number), true)
+}
+
 // BlockNumber returns the most recent block number
 func (ec *Client) BlockNumber(ctx context.Context) (uint64, error) {
 	var result hexutil.Uint64
@@ -210,6 +214,15 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			Uncles:       uncles,
 			Withdrawals:  body.Withdrawals,
 		}), nil
+}
+
+func (ec *Client) getBlockRawMessage(ctx context.Context, method string, args ...interface{}) (json.RawMessage, error) {
+	var raw json.RawMessage
+	err := ec.c.CallContext(ctx, &raw, method, args...)
+	if err != nil {
+		return nil, err
+	}
+	return raw, nil
 }
 
 // HeaderByHash returns the block header with the given hash.
