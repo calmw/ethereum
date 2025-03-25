@@ -107,6 +107,7 @@ func (abi ABI) getArguments(name string, data []byte) (Arguments, error) {
 // Unpack unpacks the output according to the abi specification.
 func (abi ABI) Unpack(name string, data []byte) ([]interface{}, error) {
 	args, err := abi.getArguments(name, data)
+	fmt.Println("-------", args, err)
 	if err != nil {
 		return nil, err
 	}
