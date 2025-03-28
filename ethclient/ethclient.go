@@ -305,30 +305,30 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 		}
 		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", layerTwoBlock.Size)
 		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
-		for i, t := range layerTwoBlock.Transactions {
-			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
-				//BlockHash:            t.BlockHash,
-				//BlockNumber:          t.BlockNumber,
-				From: t.From,
-				//Gas:                  t.Gas,
-				//GasPrice:             t.GasPrice,
-				//MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
-				//MaxFeePerGas:         t.MaxFeePerGas,
-				Hash:  t.Hash,
-				Input: t.Input,
-				//Nonce:                t.Nonce,
-				To:               t.To,
-				TransactionIndex: t.TransactionIndex,
-				Value:            t.Value,
-				Type:             0x00,
-				//AccessList:           t.AccessList,
-				//ChainID: t.ChainID,
-				//V:                    t.V,
-				//YParity:              t.YParity,
-				//R:                    t.R,
-				//S:                    t.S,
-			}
-		}
+		//for i, t := range layerTwoBlock.Transactions {
+		//	layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
+		//		//BlockHash:            t.BlockHash,
+		//		//BlockNumber:          t.BlockNumber,
+		//		From: t.From,
+		//		//Gas:                  t.Gas,
+		//		//GasPrice:             t.GasPrice,
+		//		//MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
+		//		//MaxFeePerGas:         t.MaxFeePerGas,
+		//		Hash:  t.Hash,
+		//		Input: t.Input,
+		//		//Nonce:                t.Nonce,
+		//		To:               t.To,
+		//		TransactionIndex: t.TransactionIndex,
+		//		Value:            t.Value,
+		//		Type:             0x00,
+		//		//AccessList:           t.AccessList,
+		//		//ChainID: t.ChainID,
+		//		//V:                    t.V,
+		//		//YParity:              t.YParity,
+		//		//R:                    t.R,
+		//		//S:                    t.S,
+		//	}
+		//}
 		marshal, err := json.Marshal(layerTwoBlockNew)
 		if err != nil {
 			fmt.Println("================================ 5 ")
