@@ -320,7 +320,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 				Value:            t.Value,
 				Type:             0x00,
 				//AccessList:           t.AccessList,
-				ChainID: t.ChainID,
+				//ChainID: t.ChainID,
 				//V:                    t.V,
 				//YParity:              t.YParity,
 				//R:                    t.R,
