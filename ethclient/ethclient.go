@@ -303,8 +303,8 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			Withdrawals:           layerTwoBlock.Withdrawals,
 			WithdrawalsRoot:       layerTwoBlock.WithdrawalsRoot,
 		}
-		fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", layerTwoBlock.Size)
-		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
+		//fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", layerTwoBlock.Size)
+		//layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
 		//for i, t := range layerTwoBlock.Transactions {
 		//	layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
 		//		//BlockHash:            t.BlockHash,
