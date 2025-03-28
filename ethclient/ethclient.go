@@ -334,12 +334,12 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			fmt.Println("================================ 5 ")
 			return nil, err
 		}
+		fmt.Println("================================ 7 ", string(marshal))
 		if err := json.Unmarshal(marshal, &body); err != nil {
 			fmt.Println("================================ 6 ")
 			return nil, err
 		}
 	}
-	fmt.Println("================================ 7 ", string(raw))
 	// Quick-verify transaction and uncle lists. This mostly helps with debugging the server.
 	if head.UncleHash == types.EmptyUncleHash && len(body.UncleHashes) > 0 {
 		return nil, errors.New("server returned non-empty uncle list but block header indicates no uncles")
