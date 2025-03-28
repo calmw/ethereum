@@ -304,39 +304,39 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			WithdrawalsRoot:       layerTwoBlock.WithdrawalsRoot,
 		}
 		//fmt.Println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", layerTwoBlock.Size)
-		//layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
-		layerTwoBlockNew.Size = "0x00"
-		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, 0)
-		//for i, t := range layerTwoBlock.Transactions {
-		//	layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
-		//		//BlockHash:            t.BlockHash,
-		//		//BlockNumber:          t.BlockNumber,
-		//		From: t.From,
-		//		//Gas:                  t.Gas,
-		//		//GasPrice:             t.GasPrice,
-		//		//MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
-		//		//MaxFeePerGas:         t.MaxFeePerGas,
-		//		Hash:  t.Hash,
-		//		Input: t.Input,
-		//		//Nonce:                t.Nonce,
-		//		To:               t.To,
-		//		TransactionIndex: t.TransactionIndex,
-		//		Value:            t.Value,
-		//		Type:             0x00,
-		//		//AccessList:           t.AccessList,
-		//		//ChainID: t.ChainID,
-		//		//V:                    t.V,
-		//		//YParity:              t.YParity,
-		//		//R:                    t.R,
-		//		//S:                    t.S,
-		//	}
-		//}
+		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
+		//layerTwoBlockNew.Size = "0x00"
+		//layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, 0)
+		for i, t := range layerTwoBlock.Transactions {
+			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
+				BlockHash:            t.BlockHash,
+				BlockNumber:          t.BlockNumber,
+				From:                 t.From,
+				Gas:                  t.Gas,
+				GasPrice:             t.GasPrice,
+				MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
+				MaxFeePerGas:         t.MaxFeePerGas,
+				Hash:                 t.Hash,
+				Input:                t.Input,
+				Nonce:                t.Nonce,
+				To:                   t.To,
+				TransactionIndex:     t.TransactionIndex,
+				Value:                t.Value,
+				Type:                 0x00,
+				AccessList:           t.AccessList,
+				ChainID:              t.ChainID,
+				V:                    t.V,
+				YParity:              t.YParity,
+				R:                    t.R,
+				S:                    t.S,
+			}
+		}
 		marshal, err := json.Marshal(layerTwoBlockNew)
 		if err != nil {
 			fmt.Println("================================ 5 ")
 			return nil, err
 		}
-		fmt.Println("================================ 7 ", string(marshal))
+		//fmt.Println("================================ 7 ", string(marshal))
 		if err := json.Unmarshal(marshal, &body); err != nil {
 			fmt.Println("================================ 6 ")
 			return nil, err
@@ -368,6 +368,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			}
 		}
 		if err := ec.c.BatchCallContext(ctx, reqs); err != nil {
+			fmt.Println("================================ 77 ")
 			return nil, err
 		}
 		for i := range reqs {
