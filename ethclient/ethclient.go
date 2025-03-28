@@ -150,6 +150,8 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 
 	// Decode header and transactions.
 	var head *types.Header
+	fmt.Println("================================")
+	fmt.Println(string(raw))
 	if err := json.Unmarshal(raw, &head); err != nil {
 		return nil, err
 	}
