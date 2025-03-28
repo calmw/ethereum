@@ -150,9 +150,10 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 
 	// Decode header and transactions.
 	var head *types.Header
-	fmt.Println("================================")
+	fmt.Println("================================ 1 ")
 	fmt.Println(string(raw))
 	if err := json.Unmarshal(raw, &head); err != nil {
+		fmt.Println("================================ 2 ")
 		return nil, err
 	}
 	// When the block is not found, the API returns JSON null.
@@ -162,6 +163,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 
 	var body rpcBlock
 	if err := json.Unmarshal(raw, &body); err != nil {
+		fmt.Println("================================ 3 ")
 		return nil, err
 	}
 	// Quick-verify transaction and uncle lists. This mostly helps with debugging the server.
