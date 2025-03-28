@@ -184,6 +184,57 @@ type LayerTwoTxData struct {
 	To                   string        `json:"to"`
 	TransactionIndex     string        `json:"transactionIndex"`
 	Value                string        `json:"value"`
+	Type                 string        `json:"type"`
+	AccessList           []interface{} `json:"accessList,omitempty"`
+	ChainID              string        `json:"chainId"`
+	V                    string        `json:"v"`
+	YParity              string        `json:"yParity,omitempty"`
+	R                    string        `json:"r"`
+	S                    string        `json:"s"`
+}
+type LayerTwoBlockNew struct {
+	BaseFeePerGas         string              `json:"baseFeePerGas"`
+	BlobGasUsed           string              `json:"blobGasUsed"`
+	Difficulty            string              `json:"difficulty"`
+	ExcessBlobGas         string              `json:"excessBlobGas"`
+	ExtraData             string              `json:"extraData"`
+	GasLimit              string              `json:"gasLimit"`
+	GasUsed               string              `json:"gasUsed"`
+	Hash                  string              `json:"hash"`
+	LogsBloom             string              `json:"logsBloom"`
+	Miner                 string              `json:"miner"`
+	MixHash               string              `json:"mixHash"`
+	Nonce                 string              `json:"nonce"`
+	Number                string              `json:"number"`
+	ParentBeaconBlockRoot string              `json:"parentBeaconBlockRoot"`
+	ParentHash            string              `json:"parentHash"`
+	ReceiptsRoot          string              `json:"receiptsRoot"`
+	RequestsHash          string              `json:"requestsHash"`
+	Sha3Uncles            string              `json:"sha3Uncles"`
+	Size                  string              `json:"size"`
+	StateRoot             string              `json:"stateRoot"`
+	Timestamp             string              `json:"timestamp"`
+	Transactions          []LayerTwoTxDataNew `json:"transactions"`
+	TransactionsRoot      string              `json:"transactionsRoot"`
+	Uncles                []interface{}       `json:"uncles"`
+	Withdrawals           []interface{}       `json:"withdrawals"`
+	WithdrawalsRoot       string              `json:"withdrawalsRoot"`
+}
+
+type LayerTwoTxDataNew struct {
+	BlockHash            string        `json:"blockHash"`
+	BlockNumber          string        `json:"blockNumber"`
+	From                 string        `json:"from"`
+	Gas                  string        `json:"gas"`
+	GasPrice             string        `json:"gasPrice"`
+	MaxPriorityFeePerGas string        `json:"maxPriorityFeePerGas,omitempty"`
+	MaxFeePerGas         string        `json:"maxFeePerGas,omitempty"`
+	Hash                 string        `json:"hash"`
+	Input                string        `json:"input"`
+	Nonce                string        `json:"nonce"`
+	To                   string        `json:"to"`
+	TransactionIndex     string        `json:"transactionIndex"`
+	Value                string        `json:"value"`
 	Type                 byte          `json:"type"`
 	AccessList           []interface{} `json:"accessList,omitempty"`
 	ChainID              string        `json:"chainId"`
@@ -218,14 +269,63 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 		fmt.Println("================================ 3 ")
 		// 尝试解析Layer2 block数据
 		var layerTwoBlock LayerTwoBlock
-		var layerTwoBlockNew LayerTwoBlock
-		if errL2 := json.Unmarshal(raw, &body); errL2 != nil {
+		if errL2 := json.Unmarshal(raw, &layerTwoBlock); errL2 != nil {
 			fmt.Println("================================ 4 ")
+			fmt.Println(string(raw))
 			return nil, err
 		}
-		layerTwoBlockNew = layerTwoBlock
-		for i, _ := range layerTwoBlock.Transactions {
-			layerTwoBlockNew.Transactions[i].Type = 0x00
+
+		var layerTwoBlockNew = LayerTwoBlockNew{
+			BaseFeePerGas:         layerTwoBlock.BaseFeePerGas,
+			BlobGasUsed:           layerTwoBlock.BlobGasUsed,
+			Difficulty:            layerTwoBlock.Difficulty,
+			ExcessBlobGas:         layerTwoBlock.ExcessBlobGas,
+			ExtraData:             layerTwoBlock.ExtraData,
+			GasLimit:              layerTwoBlock.GasLimit,
+			GasUsed:               layerTwoBlock.GasUsed,
+			Hash:                  layerTwoBlock.Hash,
+			LogsBloom:             layerTwoBlock.LogsBloom,
+			Miner:                 layerTwoBlock.Miner,
+			MixHash:               layerTwoBlock.MixHash,
+			Nonce:                 layerTwoBlock.Nonce,
+			Number:                layerTwoBlock.Number,
+			ParentBeaconBlockRoot: layerTwoBlock.ParentBeaconBlockRoot,
+			ParentHash:            layerTwoBlock.ParentHash,
+			ReceiptsRoot:          layerTwoBlock.ReceiptsRoot,
+			RequestsHash:          layerTwoBlock.RequestsHash,
+			Sha3Uncles:            layerTwoBlock.Sha3Uncles,
+			Size:                  layerTwoBlock.Size,
+			StateRoot:             layerTwoBlock.StateRoot,
+			Timestamp:             layerTwoBlock.Timestamp,
+			//Transactions:          layerTwoBlock.BaseFeePerGas,
+			TransactionsRoot: layerTwoBlock.BaseFeePerGas,
+			Uncles:           layerTwoBlock.Uncles,
+			Withdrawals:      layerTwoBlock.Withdrawals,
+			WithdrawalsRoot:  layerTwoBlock.WithdrawalsRoot,
+		}
+		for i, t := range layerTwoBlock.Transactions {
+			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
+				BlockHash:            t.BlockHash,
+				BlockNumber:          t.BlockNumber,
+				From:                 t.From,
+				Gas:                  t.Gas,
+				GasPrice:             t.GasPrice,
+				MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
+				MaxFeePerGas:         t.MaxFeePerGas,
+				Hash:                 t.Hash,
+				Input:                t.Input,
+				Nonce:                t.Nonce,
+				To:                   t.To,
+				TransactionIndex:     t.TransactionIndex,
+				Value:                t.Value,
+				Type:                 0x00,
+				AccessList:           t.AccessList,
+				ChainID:              t.ChainID,
+				V:                    t.V,
+				YParity:              t.YParity,
+				R:                    t.R,
+				S:                    t.S,
+			}
 		}
 		marshal, err := json.Marshal(layerTwoBlockNew)
 		if err != nil {
