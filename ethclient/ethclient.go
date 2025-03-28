@@ -365,7 +365,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			}
 		}
 		if err := ec.c.BatchCallContext(ctx, reqs); err != nil {
-			fmt.Println("================================ 77 ")
+			fmt.Println("================================ 77888 ")
 			return nil, err
 		}
 		for i := range reqs {
