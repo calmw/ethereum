@@ -297,12 +297,12 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			Size:                  layerTwoBlock.Size,
 			StateRoot:             layerTwoBlock.StateRoot,
 			Timestamp:             layerTwoBlock.Timestamp,
-			//Transactions:          layerTwoBlock.BaseFeePerGas,
-			TransactionsRoot: layerTwoBlock.BaseFeePerGas,
-			Uncles:           layerTwoBlock.Uncles,
-			Withdrawals:      layerTwoBlock.Withdrawals,
-			WithdrawalsRoot:  layerTwoBlock.WithdrawalsRoot,
+			TransactionsRoot:      layerTwoBlock.BaseFeePerGas,
+			Uncles:                layerTwoBlock.Uncles,
+			Withdrawals:           layerTwoBlock.Withdrawals,
+			WithdrawalsRoot:       layerTwoBlock.WithdrawalsRoot,
 		}
+		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
 		for i, t := range layerTwoBlock.Transactions {
 			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
 				BlockHash:            t.BlockHash,
