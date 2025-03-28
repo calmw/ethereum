@@ -245,6 +245,154 @@ type LayerTwoTxDataNew struct {
 	Size                 string        `json:"size"`
 }
 
+//func (ec *Client) getBlock(ctx context.Context, method string, args ...interface{}) (*types.Block, error) {
+//	var raw json.RawMessage
+//	err := ec.c.CallContext(ctx, &raw, method, args...)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	// Decode header and transactions.
+//	var head *types.Header
+//	fmt.Println("================================ 1 ")
+//	//fmt.Println(string(raw))
+//	if err := json.Unmarshal(raw, &head); err != nil {
+//		fmt.Println("================================ 2 ")
+//		return nil, err
+//	}
+//	// When the block is not found, the API returns JSON null.
+//	if head == nil {
+//		return nil, ethereum.NotFound
+//	}
+//
+//	var body rpcBlock
+//	if err := json.Unmarshal(raw, &body); err != nil {
+//		fmt.Println("================================ 3 ")
+//		// 尝试解析Layer2 block数据
+//		var layerTwoBlock LayerTwoBlock
+//		if errL2 := json.Unmarshal(raw, &layerTwoBlock); errL2 != nil {
+//			fmt.Println("================================ 4 ")
+//			fmt.Println(string(raw))
+//			return nil, err
+//		}
+//
+//		var layerTwoBlockNew = LayerTwoBlockNew{
+//			BaseFeePerGas:         layerTwoBlock.BaseFeePerGas,
+//			BlobGasUsed:           layerTwoBlock.BlobGasUsed,
+//			Difficulty:            layerTwoBlock.Difficulty,
+//			ExcessBlobGas:         layerTwoBlock.ExcessBlobGas,
+//			ExtraData:             layerTwoBlock.ExtraData,
+//			GasLimit:              layerTwoBlock.GasLimit,
+//			GasUsed:               layerTwoBlock.GasUsed,
+//			Hash:                  layerTwoBlock.Hash,
+//			LogsBloom:             layerTwoBlock.LogsBloom,
+//			Miner:                 layerTwoBlock.Miner,
+//			MixHash:               layerTwoBlock.MixHash,
+//			Nonce:                 layerTwoBlock.Nonce,
+//			Number:                layerTwoBlock.Number,
+//			ParentBeaconBlockRoot: layerTwoBlock.ParentBeaconBlockRoot,
+//			ParentHash:            layerTwoBlock.ParentHash,
+//			ReceiptsRoot:          layerTwoBlock.ReceiptsRoot,
+//			RequestsHash:          layerTwoBlock.RequestsHash,
+//			Sha3Uncles:            layerTwoBlock.Sha3Uncles,
+//			Size:                  layerTwoBlock.Size,
+//			StateRoot:             layerTwoBlock.StateRoot,
+//			Timestamp:             layerTwoBlock.Timestamp,
+//			TransactionsRoot:      layerTwoBlock.BaseFeePerGas,
+//			Uncles:                layerTwoBlock.Uncles,
+//			Withdrawals:           layerTwoBlock.Withdrawals,
+//			WithdrawalsRoot:       layerTwoBlock.WithdrawalsRoot,
+//		}
+//		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
+//		for i, t := range layerTwoBlock.Transactions {
+//			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
+//				BlockHash:            t.BlockHash,
+//				BlockNumber:          t.BlockNumber,
+//				From:                 t.From,
+//				Gas:                  t.Gas,
+//				GasPrice:             t.GasPrice,
+//				MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
+//				MaxFeePerGas:         t.MaxFeePerGas,
+//				Hash:                 t.Hash,
+//				Input:                t.Input,
+//				Nonce:                t.Nonce,
+//				To:                   t.To,
+//				TransactionIndex:     t.TransactionIndex,
+//				Value:                t.Value,
+//				Type:                 0x00,
+//				AccessList:           t.AccessList,
+//				ChainID:              t.ChainID,
+//				V:                    t.V,
+//				YParity:              t.YParity,
+//				R:                    t.R,
+//				S:                    t.S,
+//			}
+//		}
+//		marshal, err := json.Marshal(layerTwoBlockNew)
+//		if err != nil {
+//			fmt.Println("================================ 5 ")
+//			return nil, err
+//		}
+//		//fmt.Println("================================ 7 ", string(marshal))
+//		if err := json.Unmarshal(marshal, &body); err != nil {
+//			fmt.Println("================================ 6 ")
+//			return nil, err
+//		}
+//	}
+//	// Quick-verify transaction and uncle lists. This mostly helps with debugging the server.
+//	if head.UncleHash == types.EmptyUncleHash && len(body.UncleHashes) > 0 {
+//		return nil, errors.New("server returned non-empty uncle list but block header indicates no uncles")
+//	}
+//	if head.UncleHash != types.EmptyUncleHash && len(body.UncleHashes) == 0 {
+//		return nil, errors.New("server returned empty uncle list but block header indicates uncles")
+//	}
+//	if head.TxHash == types.EmptyTxsHash && len(body.Transactions) > 0 {
+//		return nil, errors.New("server returned non-empty transaction list but block header indicates no transactions")
+//	}
+//	if head.TxHash != types.EmptyTxsHash && len(body.Transactions) == 0 {
+//		return nil, errors.New("server returned empty transaction list but block header indicates transactions")
+//	}
+//	var uncles []*types.Header
+//	if len(body.UncleHashes) > 0 {
+//		uncles = make([]*types.Header, len(body.UncleHashes))
+//		reqs := make([]rpc.BatchElem, len(body.UncleHashes))
+//		for i := range reqs {
+//			reqs[i] = rpc.BatchElem{
+//				Method: "eth_getUncleByBlockHashAndIndex",
+//				Args:   []interface{}{body.Hash, hexutil.EncodeUint64(uint64(i))},
+//				Result: &uncles[i],
+//			}
+//		}
+//		if err := ec.c.BatchCallContext(ctx, reqs); err != nil {
+//			fmt.Println("================================ 77888 ")
+//			return nil, err
+//		}
+//		for i := range reqs {
+//			if reqs[i].Error != nil {
+//				return nil, reqs[i].Error
+//			}
+//			if uncles[i] == nil {
+//				return nil, fmt.Errorf("got null header for uncle %d of block %x", i, body.Hash[:])
+//			}
+//		}
+//	}
+//	// Fill the sender cache of transactions in the block.
+//	txs := make([]*types.Transaction, len(body.Transactions))
+//	for i, tx := range body.Transactions {
+//		if tx.From != nil {
+//			setSenderFromServer(tx.tx, *tx.From, body.Hash)
+//		}
+//		txs[i] = tx.tx
+//	}
+//
+//	return types.NewBlockWithHeader(head).WithBody(
+//		types.Body{
+//			Transactions: txs,
+//			Uncles:       uncles,
+//			Withdrawals:  body.Withdrawals,
+//		}), nil
+//}
+
 func (ec *Client) getBlock(ctx context.Context, method string, args ...interface{}) (*types.Block, error) {
 	var raw json.RawMessage
 	err := ec.c.CallContext(ctx, &raw, method, args...)
@@ -254,10 +402,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 
 	// Decode header and transactions.
 	var head *types.Header
-	fmt.Println("================================ 1 ")
-	//fmt.Println(string(raw))
 	if err := json.Unmarshal(raw, &head); err != nil {
-		fmt.Println("================================ 2 ")
 		return nil, err
 	}
 	// When the block is not found, the API returns JSON null.
@@ -267,77 +412,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 
 	var body rpcBlock
 	if err := json.Unmarshal(raw, &body); err != nil {
-		fmt.Println("================================ 3 ")
-		// 尝试解析Layer2 block数据
-		var layerTwoBlock LayerTwoBlock
-		if errL2 := json.Unmarshal(raw, &layerTwoBlock); errL2 != nil {
-			fmt.Println("================================ 4 ")
-			fmt.Println(string(raw))
-			return nil, err
-		}
-
-		var layerTwoBlockNew = LayerTwoBlockNew{
-			BaseFeePerGas:         layerTwoBlock.BaseFeePerGas,
-			BlobGasUsed:           layerTwoBlock.BlobGasUsed,
-			Difficulty:            layerTwoBlock.Difficulty,
-			ExcessBlobGas:         layerTwoBlock.ExcessBlobGas,
-			ExtraData:             layerTwoBlock.ExtraData,
-			GasLimit:              layerTwoBlock.GasLimit,
-			GasUsed:               layerTwoBlock.GasUsed,
-			Hash:                  layerTwoBlock.Hash,
-			LogsBloom:             layerTwoBlock.LogsBloom,
-			Miner:                 layerTwoBlock.Miner,
-			MixHash:               layerTwoBlock.MixHash,
-			Nonce:                 layerTwoBlock.Nonce,
-			Number:                layerTwoBlock.Number,
-			ParentBeaconBlockRoot: layerTwoBlock.ParentBeaconBlockRoot,
-			ParentHash:            layerTwoBlock.ParentHash,
-			ReceiptsRoot:          layerTwoBlock.ReceiptsRoot,
-			RequestsHash:          layerTwoBlock.RequestsHash,
-			Sha3Uncles:            layerTwoBlock.Sha3Uncles,
-			Size:                  layerTwoBlock.Size,
-			StateRoot:             layerTwoBlock.StateRoot,
-			Timestamp:             layerTwoBlock.Timestamp,
-			TransactionsRoot:      layerTwoBlock.BaseFeePerGas,
-			Uncles:                layerTwoBlock.Uncles,
-			Withdrawals:           layerTwoBlock.Withdrawals,
-			WithdrawalsRoot:       layerTwoBlock.WithdrawalsRoot,
-		}
-		layerTwoBlockNew.Transactions = make([]LayerTwoTxDataNew, len(layerTwoBlock.Transactions))
-		for i, t := range layerTwoBlock.Transactions {
-			layerTwoBlockNew.Transactions[i] = LayerTwoTxDataNew{
-				BlockHash:            t.BlockHash,
-				BlockNumber:          t.BlockNumber,
-				From:                 t.From,
-				Gas:                  t.Gas,
-				GasPrice:             t.GasPrice,
-				MaxPriorityFeePerGas: t.MaxPriorityFeePerGas,
-				MaxFeePerGas:         t.MaxFeePerGas,
-				Hash:                 t.Hash,
-				Input:                t.Input,
-				Nonce:                t.Nonce,
-				To:                   t.To,
-				TransactionIndex:     t.TransactionIndex,
-				Value:                t.Value,
-				Type:                 0x00,
-				AccessList:           t.AccessList,
-				ChainID:              t.ChainID,
-				V:                    t.V,
-				YParity:              t.YParity,
-				R:                    t.R,
-				S:                    t.S,
-			}
-		}
-		marshal, err := json.Marshal(layerTwoBlockNew)
-		if err != nil {
-			fmt.Println("================================ 5 ")
-			return nil, err
-		}
-		//fmt.Println("================================ 7 ", string(marshal))
-		if err := json.Unmarshal(marshal, &body); err != nil {
-			fmt.Println("================================ 6 ")
-			return nil, err
-		}
+		return nil, err
 	}
 	// Quick-verify transaction and uncle lists. This mostly helps with debugging the server.
 	if head.UncleHash == types.EmptyUncleHash && len(body.UncleHashes) > 0 {
@@ -365,7 +440,6 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 			}
 		}
 		if err := ec.c.BatchCallContext(ctx, reqs); err != nil {
-			fmt.Println("================================ 77888 ")
 			return nil, err
 		}
 		for i := range reqs {
