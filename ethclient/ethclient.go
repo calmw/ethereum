@@ -141,6 +141,58 @@ type rpcBlock struct {
 	Withdrawals  []*types.Withdrawal `json:"withdrawals,omitempty"`
 }
 
+type LayerTwoBlock struct {
+	BaseFeePerGas         string           `json:"baseFeePerGas"`
+	BlobGasUsed           string           `json:"blobGasUsed"`
+	Difficulty            string           `json:"difficulty"`
+	ExcessBlobGas         string           `json:"excessBlobGas"`
+	ExtraData             string           `json:"extraData"`
+	GasLimit              string           `json:"gasLimit"`
+	GasUsed               string           `json:"gasUsed"`
+	Hash                  string           `json:"hash"`
+	LogsBloom             string           `json:"logsBloom"`
+	Miner                 string           `json:"miner"`
+	MixHash               string           `json:"mixHash"`
+	Nonce                 string           `json:"nonce"`
+	Number                string           `json:"number"`
+	ParentBeaconBlockRoot string           `json:"parentBeaconBlockRoot"`
+	ParentHash            string           `json:"parentHash"`
+	ReceiptsRoot          string           `json:"receiptsRoot"`
+	RequestsHash          string           `json:"requestsHash"`
+	Sha3Uncles            string           `json:"sha3Uncles"`
+	Size                  string           `json:"size"`
+	StateRoot             string           `json:"stateRoot"`
+	Timestamp             string           `json:"timestamp"`
+	Transactions          []LayerTwoTxData `json:"transactions"`
+	TransactionsRoot      string           `json:"transactionsRoot"`
+	Uncles                []interface{}    `json:"uncles"`
+	Withdrawals           []interface{}    `json:"withdrawals"`
+	WithdrawalsRoot       string           `json:"withdrawalsRoot"`
+}
+
+type LayerTwoTxData struct {
+	BlockHash            string        `json:"blockHash"`
+	BlockNumber          string        `json:"blockNumber"`
+	From                 string        `json:"from"`
+	Gas                  string        `json:"gas"`
+	GasPrice             string        `json:"gasPrice"`
+	MaxPriorityFeePerGas string        `json:"maxPriorityFeePerGas,omitempty"`
+	MaxFeePerGas         string        `json:"maxFeePerGas,omitempty"`
+	Hash                 string        `json:"hash"`
+	Input                string        `json:"input"`
+	Nonce                string        `json:"nonce"`
+	To                   string        `json:"to"`
+	TransactionIndex     string        `json:"transactionIndex"`
+	Value                string        `json:"value"`
+	Type                 byte          `json:"type"`
+	AccessList           []interface{} `json:"accessList,omitempty"`
+	ChainID              string        `json:"chainId"`
+	V                    string        `json:"v"`
+	YParity              string        `json:"yParity,omitempty"`
+	R                    string        `json:"r"`
+	S                    string        `json:"s"`
+}
+
 func (ec *Client) getBlock(ctx context.Context, method string, args ...interface{}) (*types.Block, error) {
 	var raw json.RawMessage
 	err := ec.c.CallContext(ctx, &raw, method, args...)
@@ -151,7 +203,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 	// Decode header and transactions.
 	var head *types.Header
 	fmt.Println("================================ 1 ")
-	fmt.Println(string(raw))
+	//fmt.Println(string(raw))
 	if err := json.Unmarshal(raw, &head); err != nil {
 		fmt.Println("================================ 2 ")
 		return nil, err
@@ -164,7 +216,26 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 	var body rpcBlock
 	if err := json.Unmarshal(raw, &body); err != nil {
 		fmt.Println("================================ 3 ")
-		return nil, err
+		// 尝试解析Layer2 block数据
+		var layerTwoBlock LayerTwoBlock
+		var layerTwoBlockNew LayerTwoBlock
+		if errL2 := json.Unmarshal(raw, &body); errL2 != nil {
+			fmt.Println("================================ 4 ")
+			return nil, err
+		}
+		layerTwoBlockNew = layerTwoBlock
+		for i, _ := range layerTwoBlock.Transactions {
+			layerTwoBlockNew.Transactions[i].Type = 0x00
+		}
+		marshal, err := json.Marshal(layerTwoBlockNew)
+		if err != nil {
+			fmt.Println("================================ 5 ")
+			return nil, err
+		}
+		if err := json.Unmarshal(marshal, &body); err != nil {
+			fmt.Println("================================ 6 ")
+			return nil, err
+		}
 	}
 	// Quick-verify transaction and uncle lists. This mostly helps with debugging the server.
 	if head.UncleHash == types.EmptyUncleHash && len(body.UncleHashes) > 0 {
